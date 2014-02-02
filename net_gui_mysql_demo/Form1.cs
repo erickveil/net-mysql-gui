@@ -6,11 +6,15 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace net_gui_mysql_demo
 {
     public partial class Form1 : Form
     {
+        private Thread db_thread;
+        private DBMgr db;
+
         public Form1()
         {
             InitializeComponent();
