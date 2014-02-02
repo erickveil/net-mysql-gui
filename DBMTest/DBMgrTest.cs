@@ -72,13 +72,12 @@ namespace DBMTest
         [TestMethod()]
         public void searchForValueTest()
         {
-            DBMgr target = new DBMgr(); // TODO: Initialize to an appropriate value
-            string Name = string.Empty; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
+            DBMgr target = new DBMgr("root",pw);
+            string Name = "TestSearch"; // TODO: Insert the test value in the database before testing
+            string expected = "TestValue";
             string actual;
             actual = target.searchForValue(Name);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -88,7 +87,7 @@ namespace DBMTest
         [DeploymentItem("net_gui_mysql_demo.exe")]
         public void FinalizeTest()
         {
-            DBMgr_Accessor target = new DBMgr_Accessor(); // TODO: Initialize to an appropriate value
+            DBMgr_Accessor target = new DBMgr_Accessor("root", pw);
             target.Finalize();
             Assert.Inconclusive("A method that does not return a value cannot be verified.");
         }
@@ -99,15 +98,14 @@ namespace DBMTest
         [TestMethod()]
         public void editEntryTest()
         {
-            DBMgr target = new DBMgr(); // TODO: Initialize to an appropriate value
-            int key = 0; // TODO: Initialize to an appropriate value
-            string name = string.Empty; // TODO: Initialize to an appropriate value
-            string value = string.Empty; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            DBMgr target = new DBMgr("root", pw);
+            int key = 0; // TODO: Insert the test value in the database before testing
+            string name = "TestEdit";
+            string value = "TestValue";
+            bool expected = true;
             bool actual;
             actual = target.editEntry(key, name, value);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -116,13 +114,12 @@ namespace DBMTest
         [TestMethod()]
         public void deleteEntryTest()
         {
-            DBMgr target = new DBMgr(); // TODO: Initialize to an appropriate value
-            string name = string.Empty; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            DBMgr target = new DBMgr("root", pw);
+            string name = "TestDelete"; // TODO: Insert the test value in the database before testing
+            bool expected = true;
             bool actual;
             actual = target.deleteEntry(name);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -132,12 +129,11 @@ namespace DBMTest
         [DeploymentItem("net_gui_mysql_demo.exe")]
         public void databaseConnectTest()
         {
-            DBMgr_Accessor target = new DBMgr_Accessor(); // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            DBMgr_Accessor target = new DBMgr_Accessor("root", pw);
+            bool expected = true;
             bool actual;
             actual = target.databaseConnect();
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -146,14 +142,13 @@ namespace DBMTest
         [TestMethod()]
         public void addEntryTest()
         {
-            DBMgr target = new DBMgr(); // TODO: Initialize to an appropriate value
-            string name = string.Empty; // TODO: Initialize to an appropriate value
-            string value = string.Empty; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            DBMgr target = new DBMgr("root", pw);
+            string name = "TestAdd";
+            string value = "TestValue";
+            bool expected = true;
             bool actual;
             actual = target.addEntry(name, value);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            Assert.AreEqual(expected, actual); // TODO: clean up this add after the test
         }
 
         /// <summary>
@@ -162,7 +157,7 @@ namespace DBMTest
         [TestMethod()]
         public void DBMgrConstructorTest()
         {
-            DBMgr target = new DBMgr();
+            DBMgr target = new DBMgr("root", pw);
             Assert.Inconclusive("TODO: Implement code to verify target");
         }
     }

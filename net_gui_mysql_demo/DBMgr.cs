@@ -7,7 +7,7 @@ namespace net_gui_mysql_demo
 {
     class DBMgr
     {
-        public DBMgr()
+        public DBMgr(string user, string password)
         {
         }
 
