@@ -55,7 +55,7 @@ namespace net_gui_mysql_demo
          */
         public string searchForValue(string name)
         {
-            string result;
+            string result = null;
             MySqlCommand cmd = new MySqlCommand();
 
             cmd.Connection = connection;
