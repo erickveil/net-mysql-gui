@@ -67,6 +67,21 @@ namespace DBMTest
 
 
         /// <summary>
+        ///A test for addEntry
+        ///</summary>
+        [TestMethod()]
+        public void addEntryTest()
+        {
+            DBMgr target = new DBMgr("root", pw);
+            string name = "TestAdd";
+            string value = "TestValue";
+            bool expected = true;
+            bool actual;
+            actual = target.addEntry(name, value);
+            Assert.AreEqual(expected, actual); // TODO: clean up this add after the test
+        }
+
+        /// <summary>
         ///A test for searchForValue
         ///</summary>
         [TestMethod()]
@@ -75,6 +90,20 @@ namespace DBMTest
             DBMgr target = new DBMgr("root",pw);
             string Name = "TestSearch"; // TODO: Insert the test value in the database before testing
             string expected = "TestValue";
+            string actual;
+            actual = target.searchForValue(Name);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        ///A test for searchForValue
+        ///</summary>
+        [TestMethod()]
+        public void fail_searchForValueTest()
+        {
+            DBMgr target = new DBMgr("root", pw);
+            string Name = "Not in datatbase";
+            string expected = null;
             string actual;
             actual = target.searchForValue(Name);
             Assert.AreEqual(expected, actual);
@@ -134,21 +163,6 @@ namespace DBMTest
             bool actual;
             actual = target.databaseConnect();
             Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        ///A test for addEntry
-        ///</summary>
-        [TestMethod()]
-        public void addEntryTest()
-        {
-            DBMgr target = new DBMgr("root", pw);
-            string name = "TestAdd";
-            string value = "TestValue";
-            bool expected = true;
-            bool actual;
-            actual = target.addEntry(name, value);
-            Assert.AreEqual(expected, actual); // TODO: clean up this add after the test
         }
 
         /// <summary>

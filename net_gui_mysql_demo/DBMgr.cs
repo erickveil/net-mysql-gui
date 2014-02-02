@@ -20,6 +20,7 @@ namespace net_gui_mysql_demo
         {
             user = p_user;
             pw = p_password;
+            databaseConnect();
         }
 
         ~DBMgr()
@@ -41,15 +42,28 @@ namespace net_gui_mysql_demo
             }
             catch (SqlException ex)
             {
+                connection.Close();
                 return false;
             }
 
             return true;
         }
 
-        public string searchForValue(string Name)
+        /**
+         * @return string from the query result or null if failed.
+         */
+        public string searchForValue(string name)
         {
-            return "";
+            MySqlCommand cmd = new MySqlCommand();
+
+            cmd.Connection = connection;
+            string placeholder = "@name";
+            cmd.CommandText = "select value from test where name="+placeholder;
+            cmd.Prepare();
+            cmd.Parameters.AddWithValue(placeholder, name);
+            string result = (string)cmd.ExecuteScalar();
+
+            return result;
         }
 
         public bool addEntry(string name, string value)
