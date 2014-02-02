@@ -51,9 +51,11 @@ namespace net_gui_mysql_demo
 
         /**
          * @return string from the query result or null if failed.
+         * returns empty string if null was saved in database for the result value.
          */
         public string searchForValue(string name)
         {
+            string result;
             MySqlCommand cmd = new MySqlCommand();
 
             cmd.Connection = connection;
@@ -61,7 +63,15 @@ namespace net_gui_mysql_demo
             cmd.CommandText = "select value from test where name="+placeholder;
             cmd.Prepare();
             cmd.Parameters.AddWithValue(placeholder, name);
-            string result = (string)cmd.ExecuteScalar();
+
+            try
+            {
+                result = (string)cmd.ExecuteScalar();
+            }
+            catch (System.InvalidCastException ex)
+            {
+                result = "";
+            }
 
             return result;
         }

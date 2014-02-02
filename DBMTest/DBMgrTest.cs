@@ -65,7 +65,6 @@ namespace DBMTest
         //
         #endregion
 
-
         /// <summary>
         ///A test for addEntry
         ///</summary>
@@ -88,23 +87,20 @@ namespace DBMTest
         public void searchForValueTest()
         {
             DBMgr target = new DBMgr("root",pw);
-            string Name = "TestSearch"; // TODO: Insert the test value in the database before testing
-            string expected = "TestValue";
+
+            string Name = "Null value saved";
+            string expected = "";
             string actual;
             actual = target.searchForValue(Name);
             Assert.AreEqual(expected, actual);
-        }
 
-        /// <summary>
-        ///A test for searchForValue
-        ///</summary>
-        [TestMethod()]
-        public void fail_searchForValueTest()
-        {
-            DBMgr target = new DBMgr("root", pw);
-            string Name = "Not in datatbase";
-            string expected = null;
-            string actual;
+            Name = "Not in datatbase";
+            expected = null;
+            actual = target.searchForValue(Name);
+            Assert.AreEqual(expected, actual);
+
+            Name = "TestSearch"; // TODO: Insert the test value in the database before testing
+            expected = "TestValue";
             actual = target.searchForValue(Name);
             Assert.AreEqual(expected, actual);
         }
