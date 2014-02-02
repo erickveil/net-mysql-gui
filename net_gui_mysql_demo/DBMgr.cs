@@ -5,6 +5,7 @@ using System.Text;
 
 using MySql.Data.MySqlClient;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 
 namespace net_gui_mysql_demo
 {
@@ -70,7 +71,14 @@ namespace net_gui_mysql_demo
             }
             catch (System.InvalidCastException ex)
             {
-                result = "";
+                if (cmd.ExecuteScalar() is SqlType.Null)
+                {
+                    result = "";
+                }
+                else 
+                { 
+                    result = null; 
+                }
             }
 
             return result;
