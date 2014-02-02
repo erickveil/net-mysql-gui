@@ -94,7 +94,7 @@ namespace DBMTest
             actual = target.searchForValue(Name);
             Assert.AreEqual(expected, actual);
 
-            Name = "Not in datatbase";
+            Name = "Not in datatbase"; // TODO: Insert the test value in the database before testing
             expected = null;
             actual = target.searchForValue(Name);
             Assert.AreEqual(expected, actual);
