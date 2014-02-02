@@ -16,6 +16,31 @@ namespace net_gui_mysql_demo
             InitializeComponent();
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bu_delete_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bu_edit_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bu_search_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bu_add_Click(object sender, EventArgs e)
+        {
+
+        }
+
 
     }
 }
