@@ -11,9 +11,17 @@ namespace DBMTest
 {
     public partial class PWForm : Form
     {
+        public string pw;
+
         public PWForm()
         {
             InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            pw = tb_sql_pw.Text;
+            this.Close();
         }
 
     }

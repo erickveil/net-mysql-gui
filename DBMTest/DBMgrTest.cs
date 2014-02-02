@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace DBMTest
 {
     
-    
+
     /// <summary>
     ///This is a test class for DBMgrTest and is intended
     ///to contain all DBMgrTest Unit Tests
@@ -11,7 +11,7 @@ namespace DBMTest
     [TestClass()]
     public class DBMgrTest
     {
-
+        public static string pw;
 
         private TestContext testContextInstance;
 
@@ -36,16 +36,20 @@ namespace DBMTest
         //You can use the following additional attributes as you write your tests:
         //
         //Use ClassInitialize to run code before running the first test in the class
-        //[ClassInitialize()]
-        //public static void MyClassInitialize(TestContext testContext)
-        //{
-        //}
+        [ClassInitialize()]
+        public static void MyClassInitialize(TestContext testContext)
+        {
+            PWForm pw_form = new PWForm();
+            pw_form.ShowDialog();
+            pw = pw_form.pw;
+        }
         //
         //Use ClassCleanup to run code after all tests in a class have run
-        //[ClassCleanup()]
-        //public static void MyClassCleanup()
-        //{
-        //}
+        [ClassCleanup()]
+        public static void MyClassCleanup()
+        {
+            pw = "";
+        }
         //
         //Use TestInitialize to run code before running each test
         //[TestInitialize()]
