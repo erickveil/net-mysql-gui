@@ -72,10 +72,15 @@ namespace DBMTest
         public void addEntryTest()
         {
             DBMgr target = new DBMgr("root", pw);
-            string name = "TestAdd";
-            string value = "TestValue";
+            string name = "Null value saved";
+            string value = null;
             bool expected = true;
             bool actual;
+            actual = target.addEntry(name, value);
+            Assert.AreEqual(expected, actual); // TODO: clean up this add after the test
+
+            name = "TestSearch";
+            value = "TestValue";
             actual = target.addEntry(name, value);
             Assert.AreEqual(expected, actual); // TODO: clean up this add after the test
         }
@@ -88,6 +93,15 @@ namespace DBMTest
         {
             DBMgr target = new DBMgr("root",pw);
 
+            // setup
+            string name = "Null value saved";
+            string value = null;
+            target.addEntry(name, value);
+            name = "TestSearch";
+            value = "TestValue";
+            target.addEntry(name, value); // TODO: clean up this add after the test
+
+            //test
             string Name = "Null value saved";
             string expected = "";
             string actual;
