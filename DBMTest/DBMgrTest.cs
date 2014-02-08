@@ -121,19 +121,6 @@ namespace DBMTest
             Assert.AreEqual(expected, actual);
 
             target.selfDestruct();
-
-        }
-
-        /// <summary>
-        ///A test for Finalize
-        ///</summary>
-        [TestMethod()]
-        [DeploymentItem("net_gui_mysql_demo.exe")]
-        public void FinalizeTest()
-        {
-            DBMgr_Accessor target = new DBMgr_Accessor("root", pw);
-            target.Finalize();
-            Assert.Inconclusive("A method that does not return a value cannot be verified.");
         }
 
         /// <summary>
@@ -191,16 +178,6 @@ namespace DBMTest
             bool actual;
             actual = target.databaseConnect();
             Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        ///A test for DBMgr Constructor
-        ///</summary>
-        [TestMethod()]
-        public void DBMgrConstructorTest()
-        {
-            DBMgr target = new DBMgr("root", pw);
-            Assert.Inconclusive("TODO: Implement code to verify target");
         }
     }
 }
