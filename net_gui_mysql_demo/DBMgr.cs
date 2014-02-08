@@ -127,7 +127,18 @@ namespace net_gui_mysql_demo
 
         public bool deleteEntry(string name)
         {
-            return false;
+            MySqlCommand cmd = new MySqlCommand();
+
+            cmd.Connection = connection;
+            cmd.CommandText = "delete from test where name=?";
+            cmd.Prepare();
+            cmd.Parameters.AddWithValue("?", name);
+
+            int rows_deleted = cmd.ExecuteNonQuery();
+
+            if (rows_deleted == 0) return false;
+
+            else return true;
         }
     }
 }

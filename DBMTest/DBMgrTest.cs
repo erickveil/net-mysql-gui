@@ -154,7 +154,12 @@ namespace DBMTest
         public void deleteEntryTest()
         {
             DBMgr target = new DBMgr("root", pw);
-            string name = "TestDelete"; // TODO: Insert the test value in the database before testing
+
+            // setup
+            string name = "TestDelete";
+            string value = "TestVal";
+            target.addEntry(name, value);
+            
             bool expected = true;
             bool actual;
             actual = target.deleteEntry(name);
