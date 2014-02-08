@@ -16,6 +16,7 @@ namespace net_gui_mysql_demo
         private string user = "";
         private string pw = "";
         private MySqlConnection connection = null;
+        public MySqlCommand insert_id_hook = null;
 
         public DBMgr(string p_user, string p_password)
         {
@@ -101,6 +102,7 @@ namespace net_gui_mysql_demo
         public bool addEntry(string name, string value)
         {
             MySqlCommand cmd = new MySqlCommand();
+            insert_id_hook = cmd;
 
             cmd.Connection = connection;
             cmd.CommandText = "insert into test (name,value) values(@name,@value)";
@@ -120,9 +122,22 @@ namespace net_gui_mysql_demo
             }
         }
 
-        public bool editEntry(int key, string name, string value)
+        public bool editEntry(long key, string name, string value)
         {
-            return false;
+            MySqlCommand cmd = new MySqlCommand();
+
+            cmd.Connection = connection;
+            cmd.CommandText = "update test set name=@name, value=@val where num=@key";
+            cmd.Prepare();
+            cmd.Parameters.AddWithValue("@name", name);
+            cmd.Parameters.AddWithValue("@val", value);
+            cmd.Parameters.AddWithValue("@key", key);
+
+            int rows_deleted = cmd.ExecuteNonQuery();
+
+            if (rows_deleted == 0) return false;
+
+            else return true;
         }
 
         public bool deleteEntry(string name)
@@ -139,6 +154,14 @@ namespace net_gui_mysql_demo
             if (rows_deleted == 0) return false;
 
             else return true;
+        }
+
+        public void selfDestruct()
+        {
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = connection;
+            cmd.CommandText = "delete from test";
+            cmd.ExecuteNonQuery();
         }
     }
 }

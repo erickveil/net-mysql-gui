@@ -77,12 +77,14 @@ namespace DBMTest
             bool expected = true;
             bool actual;
             actual = target.addEntry(name, value);
-            Assert.AreEqual(expected, actual); // TODO: clean up this add after the test
+            Assert.AreEqual(expected, actual);
 
             name = "TestSearch";
             value = "TestValue";
             actual = target.addEntry(name, value);
-            Assert.AreEqual(expected, actual); // TODO: clean up this add after the test
+            Assert.AreEqual(expected, actual);
+
+            target.selfDestruct();
         }
 
         /// <summary>
@@ -99,7 +101,7 @@ namespace DBMTest
             target.addEntry(name, value);
             name = "TestSearch";
             value = "TestValue";
-            target.addEntry(name, value); // TODO: clean up this add after the test
+            target.addEntry(name, value);
 
             //test
             string Name = "Null value saved";
@@ -108,15 +110,18 @@ namespace DBMTest
             actual = target.searchForValue(Name);
             Assert.AreEqual(expected, actual);
 
-            Name = "Not in datatbase"; // TODO: Insert the test value in the database before testing
+            Name = "Not in datatbase";
             expected = null;
             actual = target.searchForValue(Name);
             Assert.AreEqual(expected, actual);
 
-            Name = "TestSearch"; // TODO: Insert the test value in the database before testing
+            Name = "TestSearch";
             expected = "TestValue";
             actual = target.searchForValue(Name);
             Assert.AreEqual(expected, actual);
+
+            target.selfDestruct();
+
         }
 
         /// <summary>
@@ -138,13 +143,21 @@ namespace DBMTest
         public void editEntryTest()
         {
             DBMgr target = new DBMgr("root", pw);
-            int key = 0; // TODO: Insert the test value in the database before testing
+            // setup
             string name = "TestEdit";
-            string value = "TestValue";
+            string value = "TestVal";
+            target.addEntry(name, value);
+
+            long key = target.insert_id_hook.LastInsertedId;
+
+            name = "TestEdit";
+            value = "editedValue";
             bool expected = true;
             bool actual;
             actual = target.editEntry(key, name, value);
             Assert.AreEqual(expected, actual);
+
+            target.selfDestruct();
         }
 
         /// <summary>
