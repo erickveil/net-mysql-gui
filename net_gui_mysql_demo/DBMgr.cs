@@ -22,12 +22,19 @@ namespace net_gui_mysql_demo
         {
             user = p_user;
             pw = p_password;
-            databaseConnect();
+            if (!databaseConnect())
+            {
+                connection = null;
+            }
         }
 
         ~DBMgr()
         {
-            connection.Close();
+            try
+            {
+                connection.Close();
+            }
+            catch (Exception) { }
             pw = "";
         }
 
@@ -43,7 +50,11 @@ namespace net_gui_mysql_demo
                 connection = new MySqlConnection(con_str);
                 connection.Open();
             }
-            catch (SqlException ex)
+            catch (SqlException)
+            {
+                return false;
+            }
+            catch (MySqlException)
             {
                 return false;
             }
@@ -101,6 +112,8 @@ namespace net_gui_mysql_demo
         /// <returns></returns>
         public bool addEntry(string name, string value)
         {
+            if (connection == null) return false;
+
             MySqlCommand cmd = new MySqlCommand();
             insert_id_hook = cmd;
 
