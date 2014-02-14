@@ -100,7 +100,7 @@ namespace net_gui_mysql_demo
             {
                 // Likely a case of no username/password causing cmd methods to
                 // fail on a non-accessible db.
-                result = null;
+                return null;
             }
 
             try
@@ -158,18 +158,27 @@ namespace net_gui_mysql_demo
         {
             MySqlCommand cmd = new MySqlCommand();
 
-            cmd.Connection = connection;
-            cmd.CommandText = "update test set name=@name, value=@val where num=@key";
-            cmd.Prepare();
-            cmd.Parameters.AddWithValue("@name", name);
-            cmd.Parameters.AddWithValue("@val", value);
-            cmd.Parameters.AddWithValue("@key", key);
+            try
+            {
+                cmd.Connection = connection;
+                cmd.CommandText =
+                    "update test set name=@name, value=@val where num=@key";
+                cmd.Prepare();
+                cmd.Parameters.AddWithValue("@name", name);
+                cmd.Parameters.AddWithValue("@val", value);
+                cmd.Parameters.AddWithValue("@key", key);
 
-            int rows_deleted = cmd.ExecuteNonQuery();
+                int rows_deleted = cmd.ExecuteNonQuery();
 
-            if (rows_deleted == 0) return false;
+                if (rows_deleted == 0) return false;
 
-            else return true;
+                else return true;
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Likely missing sql creds
+                return false;
+            }
         }
 
         public bool deleteEntry(string name)
