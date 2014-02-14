@@ -15,6 +15,7 @@ namespace net_gui_mysql_demo
         private string database="gui_test";
         private string user = "";
         private string pw = "";
+        public long last_key;
         private MySqlConnection connection = null;
         public MySqlCommand insert_id_hook = null;
 
@@ -80,13 +81,22 @@ namespace net_gui_mysql_demo
             {
                 cmd.Connection = connection;
                 string placeholder = "@name";
-                cmd.CommandText = "select value from test where name=" + placeholder;
+                cmd.CommandText = "select value from test where name=" +
+                                  placeholder;
                 cmd.Prepare();
                 cmd.Parameters.AddWithValue(placeholder, name);
                 result = (string) cmd.ExecuteScalar();
+
+                placeholder = "@same_name";
+                cmd.CommandText = "select num from test where name=" +
+                                  placeholder;
+                cmd.Prepare();
+                cmd.Parameters.AddWithValue(placeholder, name);
+                last_key = (int) cmd.ExecuteScalar();
             }
-            catch (InvalidCastException)
+            catch (InvalidCastException ex)
             {
+                Console.WriteLine(ex);
                 // if we fail to cast to string, it might be a null value in the db
                 // so we accept this as legit and convert it to empty string
                 // otherwise, it's considered an error and return null.
@@ -99,7 +109,12 @@ namespace net_gui_mysql_demo
                 // fail on a non-accessible db.
                 result = null;
             }
-
+            catch (NullReferenceException ex)
+            {
+                // Likely caused by a null passed as search string
+                // Causes lookup for key for null value.
+                Console.WriteLine(ex+"\nresult: "+result);
+            }
 
             return result;
         }
@@ -124,6 +139,7 @@ namespace net_gui_mysql_demo
             cmd.Parameters.AddWithValue("@value", value);
 
             int rows_inserted = cmd.ExecuteNonQuery();
+            last_key = cmd.LastInsertedId;
 
             if (rows_inserted == 0)
             {

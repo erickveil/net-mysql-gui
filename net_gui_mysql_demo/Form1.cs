@@ -15,6 +15,7 @@ namespace net_gui_mysql_demo
         private Thread db_thread;
         private DBMgr db;
         private Object locker = new Object();
+        private long last_key;
 
         public Form1()
         {
@@ -49,11 +50,27 @@ namespace net_gui_mysql_demo
             db_thread.Start();
         }
 
-        public delegate void SetTextCallback(string text);
+        /// <summary>
+        /// Used for cross-thread search result invoke.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        private delegate void SetTextCallback(string name, string value);
 
-        public void setText(string text)
+        /// <summary>
+        /// After a search, fill in all necessary result fields.
+        /// The search fills in fields for other functions so that they know
+        /// what they are operating on and that it is legit data.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        private void setText(string name, string value)
         {
-            tb_search_value.Text = text;
+            tb_search_value.Text = value;
+            tb_delete_name.Text = name;
+            tb_edit_name.Text = name;
+            tb_edit_value.Text = value;
+            last_key = db.last_key;
         }
 
         private void runDbSearch()
@@ -65,19 +82,13 @@ namespace net_gui_mysql_demo
                 if (query_result == null)
                 {
                     MessageBox.Show(
-                        "Failed to find entry. Make sure the MySQL Server is running, and that the correct user name and address are entered.");
+                        "Failed to find entry. Make sure the MySQL Server is "+
+                        "running, and that the correct user name and "+
+                        "address are entered.");
                 }
                 else
                 {
-                    if (tb_search_value.InvokeRequired)
-                    {
-                        SetTextCallback text_callback = setText;
-                        Invoke(text_callback, new object[] {query_result});
-                    }
-                    else
-                    {
-                        tb_search_value.Text = query_result;
-                    }
+                    threadSafeReport(query_result);
                 }
             }
             catch (Exception ex)
@@ -86,20 +97,37 @@ namespace net_gui_mysql_demo
             }
         }
 
+        private void threadSafeReport(string query_result)
+        {
+            if (tb_search_value.InvokeRequired)
+            {
+                SetTextCallback text_callback = setText;
+                Invoke(
+                    text_callback, 
+                    new object[]{tb_search_name.Text, query_result});
+            }
+            else
+            {
+                tb_search_value.Text = query_result;
+            }
+        }
+
         private void bu_add_Click(object sender, EventArgs e)
         {
             if (tb_add_name.Text == "" || tb_add_value.Text == "")
             {
-                MessageBox.Show("Make sure you have entered a name and value in the boxes.");
+                MessageBox.Show(
+                    "Make sure you have entered a name and value in the "+
+                    "boxes.");
                 return;
             }
             
-            db_thread = new Thread(runDBAdd) { IsBackground = true };
+            db_thread = new Thread(runDbAdd) { IsBackground = true };
             db_thread.Start();
 
         }
 
-        private void runDBAdd()
+        private void runDbAdd()
         {
             try
             {
@@ -107,10 +135,13 @@ namespace net_gui_mysql_demo
                 if (!db.addEntry(tb_add_name.Text, tb_add_value.Text))
                 {
                     MessageBox.Show(
-                        "Failed to add entry to database. Make sure the MySQL Server is running, and that the correct user name and address are entered.");
+                        "Failed to add entry to database. Make sure the "+
+                        "MySQL Server is running, and that the correct user "+
+                        "name and address are entered.");
                 }
                 else
                 {
+                    last_key = db.last_key;
                     MessageBox.Show(
                         "The entry for " + tb_add_name.Text + " and " +
                         tb_add_value.Text + " have been added.");
@@ -121,7 +152,5 @@ namespace net_gui_mysql_demo
                 Console.WriteLine(ex);
             }
         }
-
-
     }
 }
