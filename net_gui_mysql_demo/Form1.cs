@@ -29,12 +29,46 @@ namespace net_gui_mysql_demo
 
         private void bu_delete_Click(object sender, EventArgs e)
         {
+            if (tb_delete_name.Text == "")
+            {
+                MessageBox.Show("The search box is empty. Find an entry to delete first.");
+                return;
+            }
 
+            db_thread = new Thread(runDbDelete) { IsBackground = true };
+            db_thread.Start();
+        }
+
+        private void runDbDelete()
+        {
+            try
+            {
+                db = new DBMgr(tb_mysql_user.Text, tb_mysql_pw.Text);
+                string name = tb_edit_name.Text;
+
+                if (!db.deleteEntry(name))
+                {
+                    MessageBox.Show(
+                        "Failed to delete the entry. Make sure the MySQL Server is " +
+                        "running, and that the correct user name and " +
+                        "address are entered.");
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "The value for " + name + " has been deleted.");
+                    threadSafeReport("");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         private void bu_edit_Click(object sender, EventArgs e)
         {
-            if (tb_search_name.Text == "")
+            if (tb_edit_name.Text == "")
             {
                 MessageBox.Show("The search box is empty.");
                 return;
