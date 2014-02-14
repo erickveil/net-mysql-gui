@@ -73,33 +73,33 @@ namespace net_gui_mysql_demo
         /// </returns>
         public string searchForValue(string name)
         {
+
             string result = null;
             MySqlCommand cmd = new MySqlCommand();
-
-            cmd.Connection = connection;
-            string placeholder = "@name";
-            cmd.CommandText = "select value from test where name="+placeholder;
-            cmd.Prepare();
-            cmd.Parameters.AddWithValue(placeholder, name);
-
             try
             {
-                result = (string)cmd.ExecuteScalar();
+                cmd.Connection = connection;
+                string placeholder = "@name";
+                cmd.CommandText = "select value from test where name=" + placeholder;
+                cmd.Prepare();
+                cmd.Parameters.AddWithValue(placeholder, name);
+                result = (string) cmd.ExecuteScalar();
             }
-            catch (System.InvalidCastException)
+            catch (InvalidCastException)
             {
                 // if we fail to cast to string, it might be a null value in the db
                 // so we accept this as legit and convert it to empty string
                 // otherwise, it's considered an error and return null.
-                if (cmd.ExecuteScalar() is DBNull)
-                {
-                    result = "";
-                }
-                else 
-                { 
-                    result = null; 
-                }
+                if (cmd.ExecuteScalar() is DBNull) result = "";
+                else result = null;
             }
+            catch (InvalidOperationException)
+            {
+                // Likely a case of no username/password causing cmd methods to
+                // fail on a non-accessible db.
+                result = null;
+            }
+
 
             return result;
         }
