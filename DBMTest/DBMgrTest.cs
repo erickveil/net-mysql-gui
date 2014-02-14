@@ -1,4 +1,6 @@
-﻿using net_gui_mysql_demo;
+﻿using System;
+using MySql.Data.Types;
+using net_gui_mysql_demo;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace DBMTest
 {
@@ -82,7 +84,9 @@ namespace DBMTest
             name = "TestSearch";
             value = "TestValue";
             actual = target.addEntry(name, value);
+            string msg = "key: " + target.last_key;
             Assert.AreEqual(expected, actual);
+            Console.WriteLine(msg);
 
             target.selfDestruct();
         }
@@ -99,26 +103,41 @@ namespace DBMTest
             string name = "Null value saved";
             string value = null;
             target.addEntry(name, value);
+            long key1 = target.last_key;
+            string msg = "added key: " + target.last_key;
+            Console.WriteLine(msg);
+
             name = "TestSearch";
             value = "TestValue";
             target.addEntry(name, value);
+            long key2 = target.last_key;
+            msg = "added key: " + target.last_key;
+            Console.WriteLine(msg);
 
             //test
             string Name = "Null value saved";
             string expected = "";
             string actual;
             actual = target.searchForValue(Name);
-            Assert.AreEqual(expected, actual);
+            msg = "key: " + target.last_key;
+            Assert.AreEqual(expected, actual,msg);
+            Assert.AreEqual(key1,target.last_key);
+            Console.WriteLine(msg);
 
             Name = "Not in datatbase";
             expected = null;
             actual = target.searchForValue(Name);
-            Assert.AreEqual(expected, actual);
+            msg = "key: " + target.last_key;
+            Assert.AreEqual(expected, actual, msg);
+            Console.WriteLine(msg);
 
             Name = "TestSearch";
             expected = "TestValue";
             actual = target.searchForValue(Name);
-            Assert.AreEqual(expected, actual);
+            msg = "key: " + target.last_key;
+            Assert.AreEqual(expected, actual, msg);
+            Assert.AreEqual(key2, target.last_key);
+            Console.WriteLine(msg);
 
             target.selfDestruct();
         }

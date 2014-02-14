@@ -62,7 +62,6 @@ namespace net_gui_mysql_demo
 
             return true;
         }
-
         
         /// <summary>
         /// </summary>
@@ -87,16 +86,10 @@ namespace net_gui_mysql_demo
                 cmd.Parameters.AddWithValue(placeholder, name);
                 result = (string) cmd.ExecuteScalar();
 
-                placeholder = "@same_name";
-                cmd.CommandText = "select num from test where name=" +
-                                  placeholder;
-                cmd.Prepare();
-                cmd.Parameters.AddWithValue(placeholder, name);
-                last_key = (int) cmd.ExecuteScalar();
+                
             }
             catch (InvalidCastException ex)
             {
-                Console.WriteLine(ex);
                 // if we fail to cast to string, it might be a null value in the db
                 // so we accept this as legit and convert it to empty string
                 // otherwise, it's considered an error and return null.
@@ -109,11 +102,21 @@ namespace net_gui_mysql_demo
                 // fail on a non-accessible db.
                 result = null;
             }
+
+            try
+            {
+                string placeholder = "@same_name";
+                cmd.CommandText = "select num from test where name=" +
+                                  placeholder;
+                cmd.Prepare();
+                cmd.Parameters.AddWithValue(placeholder, name);
+                last_key = (int)cmd.ExecuteScalar();
+            }
             catch (NullReferenceException ex)
             {
                 // Likely caused by a null passed as search string
                 // Causes lookup for key for null value.
-                Console.WriteLine(ex+"\nresult: "+result);
+                last_key = -1;
             }
 
             return result;
